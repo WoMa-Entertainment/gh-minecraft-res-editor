@@ -99,7 +99,7 @@ public class MinecraftResEditor {
 		String bibs = readFileIntoSingleString(bs);
 		bibs = bibs.replaceAll("%%modid%%", modid);
 		bibs = bibs.replaceAll("%%blockid%%", blockid);
-		save(new File(rese.repository, "src/main/resources/assets/gamehelper/blockstates/" + blockid + ".json"), bimdl);
+		save(new File(rese.repository, "src/main/resources/assets/gamehelper/blockstates/" + blockid + ".json"), bibs);
 		try {
 			Files.copy(new File(pathtotex).toPath(),
 					new File(rese.repository,
