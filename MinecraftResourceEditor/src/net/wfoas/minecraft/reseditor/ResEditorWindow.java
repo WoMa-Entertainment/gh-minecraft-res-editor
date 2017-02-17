@@ -339,6 +339,7 @@ public class ResEditorWindow extends JFrame {
 	public void openRepository(File repo) {
 		boolean b = false;
 		boolean subRepo = false;
+		boolean subRepo1 = false;
 		File[] a = repo.listFiles();
 		if (a == null) {
 			JOptionPane.showMessageDialog(null,
@@ -349,14 +350,18 @@ public class ResEditorWindow extends JFrame {
 		for (File f : a) {
 			if (f.getName().endsWith("README.md")) {
 				b = true;
-			} else if (f.getName().endsWith("GameHelper")) {
+			} else if (f.getName().endsWith("gamehelper-mc-189")) {
 				subRepo = true;
+			} else if (f.getName().endsWith("GameHelper")) {
+				subRepo1 = true;
 			}
 		}
 		if (b) {
 			repository = repo;
 		} else {
 			if (subRepo) {
+				repository = new File(repo, "gamehelper-mc-189");
+			} else if (subRepo1) {
 				repository = new File(repo, "GameHelper");
 			}
 		}

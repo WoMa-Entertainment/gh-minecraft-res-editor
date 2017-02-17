@@ -32,12 +32,14 @@ public class MinecraftResEditor {
 		String username = System.getProperty("user.home");
 		File f = new File(username, "git/GameHelper");
 		if (!f.exists()) {
+			f = new File(username, "git/gamehelper-mc-189");
+		}
+		if (!f.exists()) {
 			JOptionPane.showMessageDialog(null,
-					"The GameHelper repository wasn't found!" + System.lineSeparator() + "Code: 0x1s", "Error",
+					"The GameHelper repository wasn't found!" + System.lineSeparator() + "Code: 0x2s", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
-		System.out.println(username + "/git/GameHelper");
 		rese.openRepository(f);
 		rese.redesign();
 		rese.setVisible(true);
@@ -51,7 +53,6 @@ public class MinecraftResEditor {
 			String doc = "";
 			while ((ln = writer.readLine()) != null) {
 				if (ln.startsWith("//")) {
-					// System.out.println("Discard: " + ln);
 					continue;
 				}
 				doc = doc + ln + System.lineSeparator();
