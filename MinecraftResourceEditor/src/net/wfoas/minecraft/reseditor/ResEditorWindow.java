@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -337,7 +339,14 @@ public class ResEditorWindow extends JFrame {
 	public void openRepository(File repo) {
 		boolean b = false;
 		boolean subRepo = false;
-		for (File f : repo.listFiles()) {
+		File[] a = repo.listFiles();
+		if (a == null) {
+			JOptionPane.showMessageDialog(null,
+					"The GameHelper repository wasn't found!" + System.lineSeparator() + "Code: 0x1o", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
+		for (File f : a) {
 			if (f.getName().endsWith("README.md")) {
 				b = true;
 			} else if (f.getName().endsWith("GameHelper")) {

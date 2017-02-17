@@ -14,6 +14,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -30,6 +31,12 @@ public class MinecraftResEditor {
 		rese = new ResEditorWindow();
 		String username = System.getProperty("user.home");
 		File f = new File(username, "git/GameHelper");
+		if (!f.exists()) {
+			JOptionPane.showMessageDialog(null,
+					"The GameHelper repository wasn't found!" + System.lineSeparator() + "Code: 0x1s", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
 		System.out.println(username + "/git/GameHelper");
 		rese.openRepository(f);
 		rese.redesign();
