@@ -188,25 +188,34 @@ public class ResEditorWindow extends JFrame {
 				mod.setVisible(true);
 			}
 		});
+
+		JButton btnDeleteBlock = new JButton("Delete block");
+		btnDeleteBlock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DialogDeleteBlock mod = new DialogDeleteBlock(ResEditorWindow.this);
+				mod.setVisible(true);
+			}
+		});
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap()
-						.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING).addComponent(btnAddModelWith)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panel_1.createSequentialGroup().addComponent(btnDeleteBlock)
+										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnAddModelWith))
 								.addComponent(panel_21, GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
 						.addPreferredGap(ComponentPlacement.UNRELATED)
 						.addComponent(panel_31, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE).addContainerGap()));
-		gl_panel_1
-				.setVerticalGroup(
-						gl_panel_1.createParallelGroup(Alignment.LEADING).addGroup(
-								gl_panel_1.createSequentialGroup().addContainerGap()
-										.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-												.addGroup(gl_panel_1.createSequentialGroup()
-														.addComponent(panel_21, GroupLayout.DEFAULT_SIZE, 324,
-																Short.MAX_VALUE)
-														.addPreferredGap(ComponentPlacement.UNRELATED)
-														.addComponent(btnAddModelWith).addGap(3))
-												.addComponent(panel_31, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
-										.addContainerGap()));
+		gl_panel_1.setVerticalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap()
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_1.createSequentialGroup()
+										.addComponent(panel_21, GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+												.addComponent(btnAddModelWith).addComponent(btnDeleteBlock))
+										.addGap(3))
+								.addComponent(panel_31, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
+						.addContainerGap()));
 
 		DefaultListModel<String> stringlist = new DefaultListModel<>();
 		addAll(readAvailModels(), stringlist);

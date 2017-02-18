@@ -82,6 +82,10 @@ public class MinecraftResEditor {
 		}
 	}
 
+	protected static void delete(File path) {
+		path.delete();
+	}
+
 	public static void addModel(String modid, String blockid, String model, String pathtotex) {
 		File langFile = new File(rese.repository, "minecraft-res-editor/models/" + model + ".gh_mdl");
 		String bmdl = readFileIntoSingleString(langFile);
@@ -108,5 +112,17 @@ public class MinecraftResEditor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void deleteModel(String blockid) {
+		int choix = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete model '" + blockid + "'?");
+		if (choix == JOptionPane.YES_OPTION) {
+			delete(new File(rese.repository, "src/main/resources/assets/gamehelper/models/block/" + blockid + ".json"));
+			delete(new File(rese.repository, "src/main/resources/assets/gamehelper/models/item/" + blockid + ".json"));
+			delete(new File(rese.repository, "src/main/resources/assets/gamehelper/blockstates/" + blockid + ".json"));
+			delete(new File(rese.repository,
+					"src/main/resources/assets/gamehelper/textures/blocks/" + blockid + ".png"));
+		} else
+			return;
 	}
 }
