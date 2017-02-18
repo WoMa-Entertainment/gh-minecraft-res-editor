@@ -46,6 +46,7 @@ public class DialogDeleteBlock extends JDialog {
 		JComboBox comboBox = new JComboBox();
 		DefaultComboBoxModel<String> box = new DefaultComboBoxModel<>();
 		addAll(resedit.readModels(), box);
+		comboBox.setModel(box);
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPanel.createSequentialGroup().addContainerGap()
