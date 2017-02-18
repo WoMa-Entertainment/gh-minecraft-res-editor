@@ -70,6 +70,7 @@ public class DialogDeleteBlock extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						MinecraftResEditor.deleteModel((String) comboBox.getSelectedItem());
+						resedit.redesign();
 						DialogDeleteBlock.this.setVisible(false);
 					}
 				});
