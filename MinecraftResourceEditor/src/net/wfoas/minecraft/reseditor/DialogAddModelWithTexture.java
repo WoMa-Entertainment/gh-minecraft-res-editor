@@ -24,6 +24,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.TitledBorder;
 
 public class DialogAddModelWithTexture extends JDialog {
 
@@ -35,12 +37,14 @@ public class DialogAddModelWithTexture extends JDialog {
 	private JComboBox<String> comboBox;
 	protected ResEditorWindow resedit;
 	protected JButton okButton;
+	private JTextField textField_3;
+	private JTextField textField_4;
 
 	public DialogAddModelWithTexture(ResEditorWindow resedit) {
 		setResizable(false);
 		this.resedit = resedit;
 		setTitle("AddModelDialog - GameHelper");
-		setBounds(100, 100, 450, 284);
+		setBounds(100, 100, 450, 360);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -69,12 +73,18 @@ public class DialogAddModelWithTexture extends JDialog {
 				if ((!textField.getText().equals(""))
 						&& (!textField_1.getText().equals(""))
 						&& (!textField_2.getText().equals(""))
+						&& (!textField_3.getText().equals(""))
+						&& (!textField_3.getText().equals(""))
 						&& textField.getText() != null
 						&& textField_1.getText() != null
 						&& textField_2.getText() != null
+						&& textField_3.getText() != null
+						&& textField_4.getText() != null
 						&& (!textField.getText().isEmpty())
 						&& (!textField_1.getText().isEmpty())
-						&& (!textField_2.getText().isEmpty())) {
+						&& (!textField_2.getText().isEmpty())
+						&& (!textField_3.getText().isEmpty())
+						&& (!textField_4.getText().isEmpty())) {
 					okButton.setEnabled(true);
 				} else {
 					okButton.setEnabled(false);
@@ -119,24 +129,37 @@ public class DialogAddModelWithTexture extends JDialog {
 		textField_2.setEditable(false);
 		textField_2.getDocument().addDocumentListener(dc);
 		textField_2.setColumns(10);
+
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "I18n", TitledBorder.LEADING,
+				TitledBorder.TOP, null, null));
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel
 				.setHorizontalGroup(gl_contentPanel
 						.createParallelGroup(Alignment.LEADING)
 						.addGroup(
+								Alignment.TRAILING,
 								gl_contentPanel
 										.createSequentialGroup()
 										.addContainerGap()
 										.addGroup(
 												gl_contentPanel
 														.createParallelGroup(
-																Alignment.LEADING)
+																Alignment.TRAILING)
+														.addComponent(
+																panel,
+																Alignment.LEADING,
+																GroupLayout.DEFAULT_SIZE,
+																414,
+																Short.MAX_VALUE)
 														.addComponent(
 																lblAddBkcm,
+																Alignment.LEADING,
 																GroupLayout.DEFAULT_SIZE,
 																414,
 																Short.MAX_VALUE)
 														.addGroup(
+																Alignment.LEADING,
 																gl_contentPanel
 																		.createSequentialGroup()
 																		.addGroup(
@@ -155,9 +178,8 @@ public class DialogAddModelWithTexture extends JDialog {
 																		.addGroup(
 																				gl_contentPanel
 																						.createParallelGroup(
-																								Alignment.LEADING)
+																								Alignment.TRAILING)
 																						.addGroup(
-																								Alignment.TRAILING,
 																								gl_contentPanel
 																										.createSequentialGroup()
 																										.addComponent(
@@ -239,7 +261,68 @@ public class DialogAddModelWithTexture extends JDialog {
 																GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE,
 																GroupLayout.PREFERRED_SIZE))
-										.addContainerGap(182, Short.MAX_VALUE)));
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addComponent(panel,
+												GroupLayout.DEFAULT_SIZE, 86,
+												Short.MAX_VALUE)
+										.addContainerGap()));
+
+		JLabel lblGermanName = new JLabel("German Name:");
+
+		JLabel lblEnglishName = new JLabel("English Name:");
+
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.getDocument().addDocumentListener(dc);
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		textField_4.getDocument().addDocumentListener(dc);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(
+				Alignment.LEADING).addGroup(
+				gl_panel.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(
+								gl_panel.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblGermanName)
+										.addComponent(lblEnglishName))
+						.addGap(26)
+						.addGroup(
+								gl_panel.createParallelGroup(Alignment.LEADING)
+										.addComponent(textField_4,
+												GroupLayout.DEFAULT_SIZE, 285,
+												Short.MAX_VALUE)
+										.addComponent(textField_3,
+												GroupLayout.DEFAULT_SIZE, 285,
+												Short.MAX_VALUE))
+						.addContainerGap()));
+		gl_panel.setVerticalGroup(gl_panel
+				.createParallelGroup(Alignment.LEADING)
+				.addGroup(
+						gl_panel.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(
+										gl_panel.createParallelGroup(
+												Alignment.BASELINE)
+												.addComponent(lblGermanName)
+												.addComponent(
+														textField_3,
+														GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(
+										gl_panel.createParallelGroup(
+												Alignment.BASELINE)
+												.addComponent(lblEnglishName)
+												.addComponent(
+														textField_4,
+														GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+								.addContainerGap(13, Short.MAX_VALUE)));
+		panel.setLayout(gl_panel);
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
@@ -251,11 +334,12 @@ public class DialogAddModelWithTexture extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						// DO something
-						MinecraftResEditor.addModel(
+						MinecraftResEditor.addBlockModelWithI18n(
 								getMIDTextField().getText(),
 								getBIDTextField_1().getText(),
 								(String) (getMDLComboBox().getSelectedItem()),
-								getTEXPATHTextField_2().getText());
+								getTEXPATHTextField_2().getText(),
+								textField_3.getText(), textField_4.getText());
 						resedit.redesign();
 						DialogAddModelWithTexture.this.setVisible(false);
 					}
@@ -299,5 +383,13 @@ public class DialogAddModelWithTexture extends JDialog {
 
 	public JTextField getTEXPATHTextField_2() {
 		return textField_2;
+	}
+
+	public JTextField geti18ngermanTextField_3() {
+		return textField_3;
+	}
+
+	public JTextField geti18nenglishTextField_4() {
+		return textField_4;
 	}
 }

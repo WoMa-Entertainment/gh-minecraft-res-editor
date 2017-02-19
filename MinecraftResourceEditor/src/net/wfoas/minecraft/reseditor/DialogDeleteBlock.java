@@ -28,7 +28,8 @@ public class DialogDeleteBlock extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JLabel lblDeleteBlock;
 
-	public DefaultComboBoxModel<String> addAll(List<String> slist, DefaultComboBoxModel<String> sl) {
+	public DefaultComboBoxModel<String> addAll(List<String> slist,
+			DefaultComboBoxModel<String> sl) {
 		for (String s : slist) {
 			sl.addElement(s);
 		}
@@ -53,19 +54,55 @@ public class DialogDeleteBlock extends JDialog {
 		addAll(resedit.readModels(), box);
 		comboBox.setModel(box);
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblDeleteBlock, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 414,
-										Short.MAX_VALUE)
-								.addGroup(gl_contentPanel.createSequentialGroup().addComponent(lblBlock).addGap(139)
-										.addComponent(comboBox, 0, 236, Short.MAX_VALUE)))
-						.addContainerGap()));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
-				.createSequentialGroup().addGap(5).addComponent(lblDeleteBlock).addGap(28)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblBlock).addComponent(
-						comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(162, Short.MAX_VALUE)));
+		gl_contentPanel
+				.setHorizontalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																lblDeleteBlock,
+																Alignment.TRAILING,
+																GroupLayout.DEFAULT_SIZE,
+																414,
+																Short.MAX_VALUE)
+														.addGroup(
+																gl_contentPanel
+																		.createSequentialGroup()
+																		.addComponent(
+																				lblBlock)
+																		.addGap(139)
+																		.addComponent(
+																				comboBox,
+																				0,
+																				236,
+																				Short.MAX_VALUE)))
+										.addContainerGap()));
+		gl_contentPanel
+				.setVerticalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addGap(5)
+										.addComponent(lblDeleteBlock)
+										.addGap(28)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(lblBlock)
+														.addComponent(
+																comboBox,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(162, Short.MAX_VALUE)));
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
@@ -75,7 +112,8 @@ public class DialogDeleteBlock extends JDialog {
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						MinecraftResEditor.deleteModel((String) comboBox.getSelectedItem());
+						MinecraftResEditor.deleteBlockModel((String) comboBox
+								.getSelectedItem());
 						resedit.redesign();
 						DialogDeleteBlock.this.setVisible(false);
 					}

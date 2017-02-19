@@ -103,6 +103,15 @@ public class ResEditorWindow extends JFrame {
 		JButton btnSave = new JButton("Save");
 
 		JButton btnReload = new JButton("Reload from Source");
+
+		JButton btnAddIn = new JButton("Add i18n...");
+		btnAddIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//
+			}
+		});
+
+		JButton btnDeleteIn = new JButton("Delete i18n...");
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2
 				.setHorizontalGroup(gl_panel_2
@@ -124,6 +133,14 @@ public class ResEditorWindow extends JFrame {
 																gl_panel_2
 																		.createSequentialGroup()
 																		.addComponent(
+																				btnDeleteIn)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				btnAddIn)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
 																				btnReload)
 																		.addPreferredGap(
 																				ComponentPlacement.UNRELATED)
@@ -137,7 +154,7 @@ public class ResEditorWindow extends JFrame {
 								.createSequentialGroup()
 								.addContainerGap()
 								.addComponent(scrollPane,
-										GroupLayout.DEFAULT_SIZE, 285,
+										GroupLayout.DEFAULT_SIZE, 283,
 										Short.MAX_VALUE)
 								.addPreferredGap(ComponentPlacement.UNRELATED)
 								.addGroup(
@@ -145,7 +162,9 @@ public class ResEditorWindow extends JFrame {
 												.createParallelGroup(
 														Alignment.BASELINE)
 												.addComponent(btnSave)
-												.addComponent(btnReload))
+												.addComponent(btnReload)
+												.addComponent(btnAddIn)
+												.addComponent(btnDeleteIn))
 								.addContainerGap()));
 
 		JTextPane textPane = new JTextPane();
@@ -170,6 +189,10 @@ public class ResEditorWindow extends JFrame {
 		JButton button = new JButton("Reload from Source");
 
 		JButton button_1 = new JButton("Save");
+
+		JButton btnAddIn_1 = new JButton("Add i18n...");
+
+		JButton btnDeleteIn_1 = new JButton("Delete i18n...");
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3
 				.setHorizontalGroup(gl_panel_3
@@ -181,17 +204,24 @@ public class ResEditorWindow extends JFrame {
 										.addGroup(
 												gl_panel_3
 														.createParallelGroup(
-																Alignment.LEADING)
+																Alignment.TRAILING)
 														.addComponent(
 																scrollPane_1,
 																GroupLayout.DEFAULT_SIZE,
 																544,
 																Short.MAX_VALUE)
 														.addGroup(
-																Alignment.TRAILING,
 																gl_panel_3
 																		.createSequentialGroup()
-																		.addGap(350)
+																		.addGap(154)
+																		.addComponent(
+																				btnDeleteIn_1)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				btnAddIn_1)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
 																		.addComponent(
 																				button,
 																				GroupLayout.PREFERRED_SIZE,
@@ -212,7 +242,7 @@ public class ResEditorWindow extends JFrame {
 								.createSequentialGroup()
 								.addContainerGap()
 								.addComponent(scrollPane_1,
-										GroupLayout.DEFAULT_SIZE, 285,
+										GroupLayout.DEFAULT_SIZE, 283,
 										Short.MAX_VALUE)
 								.addGap(11)
 								.addGroup(
@@ -220,7 +250,9 @@ public class ResEditorWindow extends JFrame {
 												.createParallelGroup(
 														Alignment.BASELINE)
 												.addComponent(button_1)
-												.addComponent(button))
+												.addComponent(button)
+												.addComponent(btnAddIn_1)
+												.addComponent(btnDeleteIn_1))
 								.addContainerGap()));
 
 		JTextPane textPane_1 = new JTextPane();
@@ -473,6 +505,78 @@ public class ResEditorWindow extends JFrame {
 			writer.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addI18n(String key, String lang, String value) {
+		String doc = null;
+		try {
+			BufferedReader writer = new BufferedReader(new InputStreamReader(
+					new FileInputStream(new File(repository,
+							"src/main/resources/assets/gamehelper/lang/" + lang
+									+ ".lang")), StandardCharsets.UTF_8));
+			String ln = null;
+			doc = "";
+			while ((ln = writer.readLine()) != null) {
+				doc = doc + ln + System.lineSeparator();
+			}
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String[] sep = doc.split(System.lineSeparator());
+		try {
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(new File(repository,
+							"src/main/resources/assets/gamehelper/lang/" + lang
+									+ ".lang"), false), StandardCharsets.UTF_8));
+			for (String ds : sep) {
+				bw.write(ds);
+				bw.newLine();
+			}
+			bw.write(key + "=" + value);
+			bw.newLine();
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteI18n(String key, String lang) {
+		String doc = null;
+		try {
+			BufferedReader writer = new BufferedReader(new InputStreamReader(
+					new FileInputStream(new File(repository,
+							"src/main/resources/assets/gamehelper/lang/" + lang
+									+ ".lang")), StandardCharsets.UTF_8));
+			String ln = null;
+			doc = "";
+			while ((ln = writer.readLine()) != null) {
+				doc = doc + ln + System.lineSeparator();
+			}
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String[] sep = doc.split(System.lineSeparator());
+		try {
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(new File(repository,
+							"src/main/resources/assets/gamehelper/lang/" + lang
+									+ ".lang"), false), StandardCharsets.UTF_8));
+			for (String ds : sep) {
+				if (ds.toLowerCase().startsWith(key))
+					continue;
+				bw.write(ds);
+				bw.newLine();
+			}
+			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
