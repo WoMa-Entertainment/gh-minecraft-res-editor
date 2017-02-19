@@ -27,11 +27,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class DialogAddModelWithTexture extends JDialog {
 
+	private static final long serialVersionUID = -7653180994513561554L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	protected ResEditorWindow resedit;
 	protected JButton okButton;
 
@@ -65,10 +66,14 @@ public class DialogAddModelWithTexture extends JDialog {
 			}
 
 			public void changed() {
-				if ((!textField.getText().equals("")) && (!textField_1.getText().equals(""))
-						&& (!textField_2.getText().equals("")) && textField.getText() != null
-						&& textField_1.getText() != null && textField_2.getText() != null
-						&& (!textField.getText().isEmpty()) && (!textField_1.getText().isEmpty())
+				if ((!textField.getText().equals(""))
+						&& (!textField_1.getText().equals(""))
+						&& (!textField_2.getText().equals(""))
+						&& textField.getText() != null
+						&& textField_1.getText() != null
+						&& textField_2.getText() != null
+						&& (!textField.getText().isEmpty())
+						&& (!textField_1.getText().isEmpty())
 						&& (!textField_2.getText().isEmpty())) {
 					okButton.setEnabled(true);
 				} else {
@@ -89,7 +94,7 @@ public class DialogAddModelWithTexture extends JDialog {
 
 		DefaultComboBoxModel<String> box = new DefaultComboBoxModel<>();
 		addAll(resedit.readAvailModels(), box);
-		comboBox = new JComboBox();
+		comboBox = new JComboBox<String>();
 		comboBox.setModel(box);
 
 		JLabel lblTexture = new JLabel("Texture:");
@@ -115,40 +120,126 @@ public class DialogAddModelWithTexture extends JDialog {
 		textField_2.getDocument().addDocumentListener(dc);
 		textField_2.setColumns(10);
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addContainerGap().addGroup(gl_contentPanel
+		gl_contentPanel
+				.setHorizontalGroup(gl_contentPanel
 						.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblAddBkcm, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
-						.addGroup(gl_contentPanel.createSequentialGroup()
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblModid).addComponent(lblBlockid).addComponent(lblModel)
-										.addComponent(lblTexture))
-								.addGap(73)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-										.addGroup(Alignment.TRAILING,
-												gl_contentPanel.createSequentialGroup()
-														.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 204,
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																lblAddBkcm,
+																GroupLayout.DEFAULT_SIZE,
+																414,
 																Short.MAX_VALUE)
-														.addGap(18).addComponent(btnSearch))
-										.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-										.addComponent(textField, GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-										.addComponent(comboBox, 0, 299, Short.MAX_VALUE))))
-						.addContainerGap()));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
-				.createSequentialGroup().addContainerGap().addComponent(lblAddBkcm).addGap(18)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblModid).addComponent(
-						textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblBlockid).addComponent(
-						textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblModel).addComponent(
-						comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblTexture)
-						.addComponent(btnSearch).addComponent(textField_2, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(182, Short.MAX_VALUE)));
+														.addGroup(
+																gl_contentPanel
+																		.createSequentialGroup()
+																		.addGroup(
+																				gl_contentPanel
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								lblModid)
+																						.addComponent(
+																								lblBlockid)
+																						.addComponent(
+																								lblModel)
+																						.addComponent(
+																								lblTexture))
+																		.addGap(73)
+																		.addGroup(
+																				gl_contentPanel
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								Alignment.TRAILING,
+																								gl_contentPanel
+																										.createSequentialGroup()
+																										.addComponent(
+																												textField_2,
+																												GroupLayout.DEFAULT_SIZE,
+																												204,
+																												Short.MAX_VALUE)
+																										.addGap(18)
+																										.addComponent(
+																												btnSearch))
+																						.addComponent(
+																								textField_1,
+																								GroupLayout.DEFAULT_SIZE,
+																								299,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								textField,
+																								GroupLayout.DEFAULT_SIZE,
+																								299,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								comboBox,
+																								0,
+																								299,
+																								Short.MAX_VALUE))))
+										.addContainerGap()));
+		gl_contentPanel
+				.setVerticalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addContainerGap()
+										.addComponent(lblAddBkcm)
+										.addGap(18)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(lblModid)
+														.addComponent(
+																textField,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(
+																lblBlockid)
+														.addComponent(
+																textField_1,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(lblModel)
+														.addComponent(
+																comboBox,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(
+																lblTexture)
+														.addComponent(btnSearch)
+														.addComponent(
+																textField_2,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(182, Short.MAX_VALUE)));
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
@@ -160,8 +251,11 @@ public class DialogAddModelWithTexture extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						// DO something
-						MinecraftResEditor.addModel(getMIDTextField().getText(), getBIDTextField_1().getText(),
-								(String) (getMDLComboBox().getSelectedItem()), getTEXPATHTextField_2().getText());
+						MinecraftResEditor.addModel(
+								getMIDTextField().getText(),
+								getBIDTextField_1().getText(),
+								(String) (getMDLComboBox().getSelectedItem()),
+								getTEXPATHTextField_2().getText());
 						resedit.redesign();
 						DialogAddModelWithTexture.this.setVisible(false);
 					}
@@ -183,7 +277,8 @@ public class DialogAddModelWithTexture extends JDialog {
 		}
 	}
 
-	public DefaultComboBoxModel<String> addAll(List<String> slist, DefaultComboBoxModel<String> sl) {
+	public DefaultComboBoxModel<String> addAll(List<String> slist,
+			DefaultComboBoxModel<String> sl) {
 		for (String s : slist) {
 			sl.addElement(s);
 		}
@@ -198,7 +293,7 @@ public class DialogAddModelWithTexture extends JDialog {
 		return textField_1;
 	}
 
-	public JComboBox getMDLComboBox() {
+	public JComboBox<String> getMDLComboBox() {
 		return comboBox;
 	}
 

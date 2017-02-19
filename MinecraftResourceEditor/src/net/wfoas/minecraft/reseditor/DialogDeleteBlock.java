@@ -7,11 +7,15 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -20,6 +24,7 @@ import javax.swing.JComboBox;
 
 public class DialogDeleteBlock extends JDialog {
 
+	private static final long serialVersionUID = -2104080711841229799L;
 	private final JPanel contentPanel = new JPanel();
 	private JLabel lblDeleteBlock;
 
@@ -43,7 +48,7 @@ public class DialogDeleteBlock extends JDialog {
 			lblDeleteBlock.setFont(new Font("Tahoma", Font.BOLD, 16));
 		}
 		JLabel lblBlock = new JLabel("BlockID:");
-		JComboBox comboBox = new JComboBox();
+		JComboBox<String> comboBox = new JComboBox<String>();
 		DefaultComboBoxModel<String> box = new DefaultComboBoxModel<>();
 		addAll(resedit.readModels(), box);
 		comboBox.setModel(box);
