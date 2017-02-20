@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +34,15 @@ import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 
 public class ResEditorWindow extends JFrame {
 
 	private static final long serialVersionUID = 6229273644008449868L;
 	private JPanel contentPane;
 	File repository;
-	JPanel panel, panel_1;
+	JPanel panel, panel_1, panel_35;
 
 	public ResEditorWindow() {
 		setTitle("MinecraftResourceEditor - GameHelper");
@@ -71,6 +74,10 @@ public class ResEditorWindow extends JFrame {
 
 		panel_1 = new JPanel();
 		tabbedPane.addTab("[Block] Models and Textures", null, panel_1, "Change models and textures of blocks...");
+
+		panel_35 = new JPanel();
+		tabbedPane.addTab("SLGH", null, panel_35,
+				"<html><body>View & edit old SLGH_FTPE projects...<br>This tool is only capable of editing stuff in the GameHelper repository</body></html>");
 		redesign();
 	}
 
@@ -79,6 +86,8 @@ public class ResEditorWindow extends JFrame {
 		panel.removeAll();
 		panel_1.setLayout(null);
 		panel_1.removeAll();
+		panel_35.setLayout(null);
+		panel_35.removeAll();
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
@@ -289,6 +298,34 @@ public class ResEditorWindow extends JFrame {
 		list.setModel(stringlist1);
 		panel_21.setLayout(gl_panel_21);
 		panel_1.setLayout(gl_panel_1);
+		// lblNewLabel_1.setIcon();
+		JLabel lblNewLabel;
+		try {
+			lblNewLabel = new JLabel(new ImageIcon(new File(repository, "slgh_proj/logo.slgh_b").toURI().toURL()));
+			lblNewLabel.setSize(64 + 5, 64 + 5);
+			lblNewLabel.setLocation(12 + 5, 12 + 5);
+			lblNewLabel.setBounds(12 + 5, 12 + 5, 64 + 5, 64 + 5);
+
+			JLabel lblNewLabel_1 = new JLabel("New label");
+			GroupLayout gl_panel_261 = new GroupLayout(panel_35);
+			gl_panel_261
+					.setHorizontalGroup(gl_panel_261.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_261.createSequentialGroup().addContainerGap()
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 59,
+											GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblNewLabel_1)
+									.addContainerGap(464, Short.MAX_VALUE)));
+			gl_panel_261.setVerticalGroup(gl_panel_261.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_261
+					.createSequentialGroup()
+					.addGroup(gl_panel_261.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_261.createSequentialGroup().addGap(32).addComponent(lblNewLabel_1))
+							.addGroup(gl_panel_261.createSequentialGroup().addContainerGap().addComponent(lblNewLabel,
+									GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(312, Short.MAX_VALUE)));
+			panel_35.setLayout(gl_panel_261);
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	public DefaultListModel<String> addAll(List<String> slist, DefaultListModel<String> sl) {
