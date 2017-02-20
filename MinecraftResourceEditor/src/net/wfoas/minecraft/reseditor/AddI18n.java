@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 
 public class AddI18n extends JDialog {
 
+	private static final long serialVersionUID = -867534977469427004L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
 	private JTextField textField_1;
@@ -51,10 +52,14 @@ public class AddI18n extends JDialog {
 			}
 
 			public void changed() {
-				if ((!textField.getText().equals("")) && (!textField_1.getText().equals(""))
-						&& (!textField_2.getText().equals("")) && textField.getText() != null
-						&& textField_1.getText() != null && textField_2.getText() != null
-						&& (!textField.getText().isEmpty()) && (!textField_1.getText().isEmpty())
+				if ((!textField.getText().equals(""))
+						&& (!textField_1.getText().equals(""))
+						&& (!textField_2.getText().equals(""))
+						&& textField.getText() != null
+						&& textField_1.getText() != null
+						&& textField_2.getText() != null
+						&& (!textField.getText().isEmpty())
+						&& (!textField_1.getText().isEmpty())
 						&& (!textField_2.getText().isEmpty())) {
 					okButton.setEnabled(true);
 				} else {
@@ -80,42 +85,110 @@ public class AddI18n extends JDialog {
 		textField_2.getDocument().addDocumentListener(dc);
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel
-				.setHorizontalGroup(
-						gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
-								.createSequentialGroup().addContainerGap().addGroup(gl_contentPanel
-										.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
-												.createParallelGroup(Alignment.LEADING, false).addGroup(gl_contentPanel
-														.createSequentialGroup()
-														.addComponent(lblAddInentry, GroupLayout.PREFERRED_SIZE,
-																414, GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED))
-												.addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
-														.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-																.addComponent(lblKey).addComponent(lblValue))
-														.addPreferredGap(ComponentPlacement.RELATED, 68,
-																Short.MAX_VALUE)
-														.addGroup(gl_contentPanel
-																.createParallelGroup(Alignment.LEADING, false)
-																.addComponent(textField_1)
-																.addComponent(textField, GroupLayout.DEFAULT_SIZE, 305,
-																		Short.MAX_VALUE)
-																.addComponent(textField_2))
-														.addGap(21)))
-										.addComponent(lblLanguage))
-								.addContainerGap(10, Short.MAX_VALUE)));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
-				.createSequentialGroup().addContainerGap()
-				.addComponent(lblAddInentry, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE).addGap(33)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblKey).addComponent(
-						textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblValue).addComponent(
-						textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblLanguage)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(65, Short.MAX_VALUE)));
+				.setHorizontalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPanel
+																		.createParallelGroup(
+																				Alignment.LEADING,
+																				false)
+																		.addGroup(
+																				gl_contentPanel
+																						.createSequentialGroup()
+																						.addComponent(
+																								lblAddInentry,
+																								GroupLayout.PREFERRED_SIZE,
+																								414,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addPreferredGap(
+																								ComponentPlacement.RELATED))
+																		.addGroup(
+																				Alignment.TRAILING,
+																				gl_contentPanel
+																						.createSequentialGroup()
+																						.addGroup(
+																								gl_contentPanel
+																										.createParallelGroup(
+																												Alignment.LEADING)
+																										.addComponent(
+																												lblKey)
+																										.addComponent(
+																												lblValue))
+																						.addPreferredGap(
+																								ComponentPlacement.RELATED,
+																								68,
+																								Short.MAX_VALUE)
+																						.addGroup(
+																								gl_contentPanel
+																										.createParallelGroup(
+																												Alignment.LEADING,
+																												false)
+																										.addComponent(
+																												textField_1)
+																										.addComponent(
+																												textField,
+																												GroupLayout.DEFAULT_SIZE,
+																												305,
+																												Short.MAX_VALUE)
+																										.addComponent(
+																												textField_2))
+																						.addGap(21)))
+														.addComponent(
+																lblLanguage))
+										.addContainerGap(10, Short.MAX_VALUE)));
+		gl_contentPanel
+				.setVerticalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addContainerGap()
+										.addComponent(lblAddInentry,
+												GroupLayout.PREFERRED_SIZE, 20,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(33)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(lblKey)
+														.addComponent(
+																textField,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(lblValue)
+														.addComponent(
+																textField_1,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(
+																lblLanguage)
+														.addComponent(
+																textField_2,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(65, Short.MAX_VALUE)));
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
@@ -125,7 +198,8 @@ public class AddI18n extends JDialog {
 				okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						MinecraftResEditor.rese.addI18n(getKEYTextField().getText(), getLANGTextField_2().getText(),
+						MinecraftResEditor.rese.addI18n(getKEYTextField()
+								.getText(), getLANGTextField_2().getText(),
 								getVALUETextField_1().getText());
 						MinecraftResEditor.rese.redesign();
 						AddI18n.this.setVisible(false);

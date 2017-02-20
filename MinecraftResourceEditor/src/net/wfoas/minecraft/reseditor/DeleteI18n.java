@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 
 public class DeleteI18n extends JDialog {
 
+	private static final long serialVersionUID = -9204825419081560968L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
 	private JTextField textField_1;
@@ -47,29 +48,85 @@ public class DeleteI18n extends JDialog {
 			textField_1.setText(language);
 		}
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblDeleteIn, GroupLayout.PREFERRED_SIZE, 414, GroupLayout.PREFERRED_SIZE)
-								.addGroup(Alignment.TRAILING,
-										gl_contentPanel.createSequentialGroup()
-												.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-														.addComponent(lblKey).addComponent(lblLanguage))
-												.addPreferredGap(ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-												.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING, false)
-														.addComponent(textField_1).addComponent(textField,
-																GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE))))
-						.addContainerGap()));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
-				.createSequentialGroup().addContainerGap()
-				.addComponent(lblDeleteIn, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE).addGap(18)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblKey).addComponent(
-						textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblLanguage)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(128, Short.MAX_VALUE)));
+		gl_contentPanel
+				.setHorizontalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																lblDeleteIn,
+																GroupLayout.PREFERRED_SIZE,
+																414,
+																GroupLayout.PREFERRED_SIZE)
+														.addGroup(
+																Alignment.TRAILING,
+																gl_contentPanel
+																		.createSequentialGroup()
+																		.addGroup(
+																				gl_contentPanel
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								lblKey)
+																						.addComponent(
+																								lblLanguage))
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED,
+																				58,
+																				Short.MAX_VALUE)
+																		.addGroup(
+																				gl_contentPanel
+																						.createParallelGroup(
+																								Alignment.LEADING,
+																								false)
+																						.addComponent(
+																								textField_1)
+																						.addComponent(
+																								textField,
+																								GroupLayout.DEFAULT_SIZE,
+																								305,
+																								Short.MAX_VALUE))))
+										.addContainerGap()));
+		gl_contentPanel
+				.setVerticalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addContainerGap()
+										.addComponent(lblDeleteIn,
+												GroupLayout.PREFERRED_SIZE, 20,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(18)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(lblKey)
+														.addComponent(
+																textField,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(
+																lblLanguage)
+														.addComponent(
+																textField_1,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(128, Short.MAX_VALUE)));
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
@@ -79,7 +136,8 @@ public class DeleteI18n extends JDialog {
 				okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						MinecraftResEditor.rese.deleteI18n(getKEYTextField().getText(), getLANGTextField_1().getText());
+						MinecraftResEditor.rese.deleteI18n(getKEYTextField()
+								.getText(), getLANGTextField_1().getText());
 						MinecraftResEditor.rese.redesign();
 						DeleteI18n.this.setVisible(false);
 					}
@@ -103,9 +161,12 @@ public class DeleteI18n extends JDialog {
 				}
 
 				public void changed() {
-					if ((!textField.getText().equals("")) && (!textField_1.getText().equals(""))
-							&& textField.getText() != null && textField_1.getText() != null
-							&& (!textField.getText().isEmpty()) && (!textField_1.getText().isEmpty())) {
+					if ((!textField.getText().equals(""))
+							&& (!textField_1.getText().equals(""))
+							&& textField.getText() != null
+							&& textField_1.getText() != null
+							&& (!textField.getText().isEmpty())
+							&& (!textField_1.getText().isEmpty())) {
 						okButton.setEnabled(true);
 					} else {
 						okButton.setEnabled(false);
