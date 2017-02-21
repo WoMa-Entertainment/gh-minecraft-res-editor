@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -24,7 +25,48 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MinecraftResEditor {
 	static ResEditorWindow rese;
 
-	public static ImageIcon CR, NOTE;
+	public static ImageIcon CR_1, NOTE_1, CR, NOTE;
+	static String user, mail, pass;
+
+	public static void read() {
+		File folder = new File(System.getenv("appdata") + "/wfoasm-woma-net");
+		folder.mkdirs();
+		File file = new File(folder, "mc-res-editor.properties");
+		if (!file.exists()) {
+			new GitHubLoginDialog().setVisible(true);
+		} else {
+			readCredentials(file);
+			startRegular();
+			return;
+		}
+	}
+
+	protected static void readCredentials(File file) {
+		Properties prop = new Properties();
+		try {
+			prop.load(new FileInputStream(file));
+			user = prop.getProperty("user");
+			mail = prop.getProperty("mail");
+			pass = prop.getProperty("pass");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void saveProperties(String user, String mail, String password) {
+		Properties pro = new Properties();
+		pro.setProperty("user", user);
+		pro.setProperty("mail", mail);
+		pro.setProperty("pass", password);
+		File folder = new File(System.getenv("appdata") + "/wfoasm-woma-net");
+		folder.mkdirs();
+		try {
+			FileOutputStream fos = new FileOutputStream(new File(folder, "mc-res-editor.properties"));
+			pro.store(fos, "Do not modify!");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static ImageIcon downScale(ImageIcon ii) {
 		ii.setImage(ii.getImage().getScaledInstance(16, 16, 4));
@@ -48,13 +90,19 @@ public class MinecraftResEditor {
 	public static void main(String... args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
 
-		CR = readClassImage("/res/CRAFTING_RECIPES.png");
-		NOTE = readClassImage("/res/NOTES.png");
+		CR_1 = readClassImage("/res/CRAFTING_RECIPES.png");
+		NOTE_1 = readClassImage("/res/NOTES.png");
+		CR = downScale(CR_1, 16, 16);
+		NOTE = downScale(NOTE_1, 16, 16);
+		read();
+	}
+
+	protected static void startRegular() {
 		rese = new ResEditorWindow();
 		String username = System.getProperty("user.home");
 		File f = new File(username, "git/GameHelper");
@@ -62,10 +110,8 @@ public class MinecraftResEditor {
 			f = new File(username, "git/gamehelper-mc-189");
 		}
 		if (!f.exists()) {
-			JOptionPane.showMessageDialog(
-					null,
-					"The GameHelper repository wasn't found!"
-							+ System.lineSeparator() + "Code: 0x2s", "Error",
+			JOptionPane.showMessageDialog(null,
+					"The GameHelper repository wasn't found!" + System.lineSeparator() + "Code: 0x2s", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
@@ -76,8 +122,8 @@ public class MinecraftResEditor {
 
 	protected static String readFileIntoSingleString(File path) {
 		try {
-			BufferedReader writer = new BufferedReader(new InputStreamReader(
-					new FileInputStream(path), StandardCharsets.UTF_8));
+			BufferedReader writer = new BufferedReader(
+					new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8));
 			String ln = null;
 			String doc = "";
 			while ((ln = writer.readLine()) != null) {
@@ -100,8 +146,8 @@ public class MinecraftResEditor {
 		if (path.exists())
 			path.delete();
 		try {
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(path), StandardCharsets.UTF_8));
+			BufferedWriter writer = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8));
 			writer.write(c);
 			writer.close();
 		} catch (FileNotFoundException e) {
@@ -115,57 +161,46 @@ public class MinecraftResEditor {
 		path.delete();
 	}
 
-	public static void addBlockModelWithI18n(String modid, String blockid,
-			String model, String pathtotex, String ger, String eng) {
+	public static void addBlockModelWithI18n(String modid, String blockid, String model, String pathtotex, String ger,
+			String eng) {
 		addModel(modid, blockid, model, pathtotex);
 		addOrReplaceBlock(ger, blockid, modid, "de_DE");
 		addOrReplaceBlock(eng, blockid, modid, "en_US");
 	}
 
-	public static void addModel(String modid, String blockid, String model,
-			String pathtotex) {
-		File langFile = new File(rese.repository,
-				"minecraft-res-editor/models/" + model + ".gh_mdl");
+	public static void addModel(String modid, String blockid, String model, String pathtotex) {
+		File langFile = new File(rese.repository, "minecraft-res-editor/models/" + model + ".gh_mdl");
 		String bmdl = readFileIntoSingleString(langFile);
 		bmdl = bmdl.replaceAll("%%modid%%", modid);
 		bmdl = bmdl.replaceAll("%%blockid%%", blockid);
-		save(new File(rese.repository,
-				"src/main/resources/assets/gamehelper/models/block/" + blockid
-						+ ".json"), bmdl);
+		save(new File(rese.repository, "src/main/resources/assets/gamehelper/models/block/" + blockid + ".json"), bmdl);
 		//
-		File imf = new File(rese.repository,
-				"minecraft-res-editor/item-models/" + model + ".gh_mdl");
+		File imf = new File(rese.repository, "minecraft-res-editor/item-models/" + model + ".gh_mdl");
 		String bimdl = readFileIntoSingleString(imf);
 		bimdl = bimdl.replaceAll("%%modid%%", modid);
 		bimdl = bimdl.replaceAll("%%blockid%%", blockid);
-		save(new File(rese.repository,
-				"src/main/resources/assets/gamehelper/models/item/" + blockid
-						+ ".json"), bimdl);
+		save(new File(rese.repository, "src/main/resources/assets/gamehelper/models/item/" + blockid + ".json"), bimdl);
 		//
-		File bs = new File(rese.repository, "minecraft-res-editor/blockstates/"
-				+ model + ".gh_bs");
+		File bs = new File(rese.repository, "minecraft-res-editor/blockstates/" + model + ".gh_bs");
 		String bibs = readFileIntoSingleString(bs);
 		bibs = bibs.replaceAll("%%modid%%", modid);
 		bibs = bibs.replaceAll("%%blockid%%", blockid);
-		save(new File(rese.repository,
-				"src/main/resources/assets/gamehelper/blockstates/" + blockid
-						+ ".json"), bibs);
+		save(new File(rese.repository, "src/main/resources/assets/gamehelper/blockstates/" + blockid + ".json"), bibs);
 		try {
-			Files.copy(new File(pathtotex).toPath(), new File(rese.repository,
-					"src/main/resources/assets/gamehelper/textures/blocks/"
-							+ blockid + ".png").toPath(),
+			Files.copy(new File(pathtotex).toPath(),
+					new File(rese.repository,
+							"src/main/resources/assets/gamehelper/textures/blocks/" + blockid + ".png").toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void addTextString(File f, String blockid, String modid,
-			String i18n, String eng_ger) {
+	public static void addTextString(File f, String blockid, String modid, String i18n, String eng_ger) {
 		String doc = null;
 		try {
-			BufferedReader writer = new BufferedReader(new InputStreamReader(
-					new FileInputStream(f), StandardCharsets.UTF_8));
+			BufferedReader writer = new BufferedReader(
+					new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
 			String ln = null;
 			doc = "";
 			while ((ln = writer.readLine()) != null) {
@@ -179,8 +214,8 @@ public class MinecraftResEditor {
 		}
 		String[] sep = doc.split(System.lineSeparator());
 		try {
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(f, false), StandardCharsets.UTF_8));
+			BufferedWriter bw = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(f, false), StandardCharsets.UTF_8));
 			for (String ds : sep) {
 				bw.write(ds);
 				bw.newLine();
@@ -193,12 +228,11 @@ public class MinecraftResEditor {
 		}
 	}
 
-	public static void deleteTextString(File f, String blockid, String modid,
-			String i18n) {
+	public static void deleteTextString(File f, String blockid, String modid, String i18n) {
 		String doc = null;
 		try {
-			BufferedReader writer = new BufferedReader(new InputStreamReader(
-					new FileInputStream(f), StandardCharsets.UTF_8));
+			BufferedReader writer = new BufferedReader(
+					new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
 			String ln = null;
 			doc = "";
 			while ((ln = writer.readLine()) != null) {
@@ -213,15 +247,14 @@ public class MinecraftResEditor {
 		String[] sep = doc.split(System.lineSeparator());
 		List<String> sll = new ArrayList<String>();
 		for (String s : sep) {
-			if (s.toLowerCase().startsWith(
-					"tile." + modid + "." + blockid + ".name")) {
+			if (s.toLowerCase().startsWith("tile." + modid + "." + blockid + ".name")) {
 				continue;
 			} else
 				sll.add(s);
 		}
 		try {
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(f, false), StandardCharsets.UTF_8));
+			BufferedWriter bw = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(f, false), StandardCharsets.UTF_8));
 			for (String ds : sll) {
 				bw.write(ds);
 				bw.newLine();
@@ -232,39 +265,24 @@ public class MinecraftResEditor {
 		}
 	}
 
-	public static void addOrReplaceBlock(String i18n, String blockid,
-			String modid, String file) {
-		File langFile = new File(rese.repository,
-				"src/main/resources/assets/gamehelper/lang/" + file + ".lang");
+	public static void addOrReplaceBlock(String i18n, String blockid, String modid, String file) {
+		File langFile = new File(rese.repository, "src/main/resources/assets/gamehelper/lang/" + file + ".lang");
 		deleteTextString(langFile, blockid, modid, i18n);
-		addTextString(langFile, blockid, modid, "tile." + modid + "." + blockid
-				+ ".name", i18n);
+		addTextString(langFile, blockid, modid, "tile." + modid + "." + blockid + ".name", i18n);
 	}
 
 	public static void deleteBlockModel(String blockid) {
-		int choix = JOptionPane.showConfirmDialog(null,
-				"Are you sure you want to delete model '" + blockid + "'?");
+		int choix = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete model '" + blockid + "'?");
 		if (choix == JOptionPane.YES_OPTION) {
+			delete(new File(rese.repository, "src/main/resources/assets/gamehelper/models/block/" + blockid + ".json"));
+			delete(new File(rese.repository, "src/main/resources/assets/gamehelper/models/item/" + blockid + ".json"));
+			delete(new File(rese.repository, "src/main/resources/assets/gamehelper/blockstates/" + blockid + ".json"));
 			delete(new File(rese.repository,
-					"src/main/resources/assets/gamehelper/models/block/"
-							+ blockid + ".json"));
-			delete(new File(rese.repository,
-					"src/main/resources/assets/gamehelper/models/item/"
-							+ blockid + ".json"));
-			delete(new File(rese.repository,
-					"src/main/resources/assets/gamehelper/blockstates/"
-							+ blockid + ".json"));
-			delete(new File(rese.repository,
-					"src/main/resources/assets/gamehelper/textures/blocks/"
-							+ blockid + ".png"));
-			deleteTextString(new File(rese.repository,
-					"src/main/resources/assets/gamehelper/lang/de_DE.lang"),
-					blockid, "gamehelper", "tile.gamehelper." + blockid
-							+ ".name");
-			deleteTextString(new File(rese.repository,
-					"src/main/resources/assets/gamehelper/lang/en_US.lang"),
-					blockid, "gamehelper", "tile.gamehelper." + blockid
-							+ ".name");
+					"src/main/resources/assets/gamehelper/textures/blocks/" + blockid + ".png"));
+			deleteTextString(new File(rese.repository, "src/main/resources/assets/gamehelper/lang/de_DE.lang"), blockid,
+					"gamehelper", "tile.gamehelper." + blockid + ".name");
+			deleteTextString(new File(rese.repository, "src/main/resources/assets/gamehelper/lang/en_US.lang"), blockid,
+					"gamehelper", "tile.gamehelper." + blockid + ".name");
 		} else
 			return;
 	}
@@ -274,8 +292,7 @@ public class MinecraftResEditor {
 	protected static void readName() {
 		File f = new File(rese.repository, "slgh_proj/project.slgh_proj");
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					new FileInputStream(f)));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
 			String str = null;
 			List<String> slist = new ArrayList<String>();
 			while ((str = reader.readLine()) != null) {
