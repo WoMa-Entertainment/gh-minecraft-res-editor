@@ -63,6 +63,7 @@ public class GitCommitDialog extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						g.gitCommit(getTextPane().getText());
+						GitCommitDialog.this.dispose();
 					}
 				});
 				okButton.setActionCommand("OK");

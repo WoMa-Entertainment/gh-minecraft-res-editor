@@ -44,14 +44,19 @@ import javax.swing.table.DefaultTableModel;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.ReflogEntry;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.URIish;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import net.wfoas.git.GUIProgressMonitor;
 import net.wfoas.git.GitCommitDialog;
 import net.wfoas.git.GitCommitRunnable;
+import net.wfoas.git.GitSetProfileDialog;
 import net.wfoas.minecraft.reseditor.notescr.InfoCraftingRecipe;
 import net.wfoas.minecraft.reseditor.notescr.InfoNote;
 import net.wfoas.minecraft.reseditor.textandiconlist.DisplayableEntry;
@@ -91,6 +96,17 @@ public class ResEditorWindow extends JFrame {
 			}
 		});
 		mnGamehelperOpen.add(mntmOpenRepository);
+
+		JMenu mnGit = new JMenu("Git");
+		menuBar.add(mnGit);
+
+		JMenuItem mntmSetGlobalGit = new JMenuItem("Set global git profile...");
+		mntmSetGlobalGit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new GitSetProfileDialog().setVisible(true);
+			}
+		});
+		mnGit.add(mntmSetGlobalGit);
 
 		Component horizontalGlue = Box.createHorizontalGlue();
 		menuBar.add(horizontalGlue);
@@ -177,10 +193,9 @@ public class ResEditorWindow extends JFrame {
 				new GitCommitDialog(new GitCommitRunnable() {
 					@Override
 					public void gitCommit(String message) {
-						git.commit().setAuthor(MinecraftResEditor.user, MinecraftResEditor.mail)
-								.setCommitter(MinecraftResEditor.user, MinecraftResEditor.mail).setMessage(message);
+						stageFiles(message);
 					}
-				});
+				}).setVisible(true);
 			}
 		});
 
@@ -190,8 +205,7 @@ public class ResEditorWindow extends JFrame {
 				new GitCommitDialog(new GitCommitRunnable() {
 					@Override
 					public void gitCommit(String message) {
-						git.commit().setAuthor(MinecraftResEditor.user, MinecraftResEditor.mail)
-								.setCommitter(MinecraftResEditor.user, MinecraftResEditor.mail).setMessage(message);
+						stageFiles(message);
 						Thread t2 = new Thread(() -> {
 							GUIProgressMonitor g = new GUIProgressMonitor("Push");
 							try {
@@ -206,7 +220,7 @@ public class ResEditorWindow extends JFrame {
 						});
 						t2.start();
 					}
-				});
+				}).setVisible(true);
 			}
 		});
 
@@ -226,6 +240,22 @@ public class ResEditorWindow extends JFrame {
 												+ System.lineSeparator() + "Merge Result: "
 												+ pr.getMergeResult().getMergeStatus().toString(),
 										"Infomation", JOptionPane.INFORMATION_MESSAGE);
+								g.cleanUp();
+								stageFiles(message);
+								GUIProgressMonitor g1 = new GUIProgressMonitor("Push");
+								try {
+									Iterable<PushResult> p1r = git.push().setRemote("origin").setProgressMonitor(g1)
+											.call();
+									g1.finish();
+								} catch (Exception e1) {
+									JOptionPane
+											.showMessageDialog(
+													null, "Couldn't push!" + System.lineSeparator() + e1.getMessage()
+															+ ": " + e1.getMessage(),
+													"Error", JOptionPane.ERROR_MESSAGE);
+									e1.printStackTrace();
+								}
+								g1.cleanUp();
 							} catch (Exception e1) {
 								JOptionPane.showMessageDialog(null, "Couldn't pull!" + System.lineSeparator()
 										+ e1.getMessage() + ": " + e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -234,23 +264,8 @@ public class ResEditorWindow extends JFrame {
 							g.cleanUp();
 						});
 						t.start();
-						git.commit().setAuthor(MinecraftResEditor.user, MinecraftResEditor.mail)
-								.setCommitter(MinecraftResEditor.user, MinecraftResEditor.mail).setMessage(message);
-						Thread t2 = new Thread(() -> {
-							GUIProgressMonitor g = new GUIProgressMonitor("Push");
-							try {
-								Iterable<PushResult> pr = git.push().setRemote("origin").setProgressMonitor(g).call();
-								g.finish();
-							} catch (Exception e1) {
-								JOptionPane.showMessageDialog(null, "Couldn't push!" + System.lineSeparator()
-										+ e1.getMessage() + ": " + e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-								e1.printStackTrace();
-							}
-							g.cleanUp();
-						});
-						t2.start();
 					}
-				});
+				}).setVisible(true);
 			}
 		});
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -289,7 +304,16 @@ public class ResEditorWindow extends JFrame {
 
 		table_1 = new JTable();
 		scrollPane.setViewportView(table_1);
-		table_1.setModel(new DefaultTableModel(new String[] { "Commit ID", "Comment", "Author" }, 500));
+		DefaultTableModel m = new DefaultTableModel(new String[] { "Commit ID", "Comment", "Author" }, 0);
+		try {
+			for (RevCommit e : git.log().call()) {
+				m.addRow(new String[] { e.getId().getName(), e.getShortMessage(),
+						e.getAuthorIdent().getName() + "[" + e.getAuthorIdent().getEmailAddress() + "]" });
+			}
+		} catch (GitAPIException e1) {
+			e1.printStackTrace();
+		}
+		table_1.setModel(m);
 		panel_254.setLayout(gl_panel_254);
 	}
 
@@ -300,6 +324,8 @@ public class ResEditorWindow extends JFrame {
 			return;
 		try {
 			git = Git.init().setDirectory(repository).call();
+			CredentialsProvider.setDefault(
+					new UsernamePasswordCredentialsProvider(MinecraftResEditor.user, MinecraftResEditor.pass));
 			git.remoteSetUrl().setUri(new URIish(new URL("https://github.com/wfoasm-woma-net/gamehelper-mc-189.git")));
 			exitGit();
 		} catch (IllegalStateException e) {
@@ -307,6 +333,16 @@ public class ResEditorWindow extends JFrame {
 		} catch (GitAPIException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void stageFiles(String msg) {
+		try {
+			git.add().addFilepattern(".").call();
+			git.commit().setMessage(msg).setAuthor(MinecraftResEditor.user, MinecraftResEditor.mail)
+					.setCommitter(MinecraftResEditor.user, MinecraftResEditor.mail).call();
+		} catch (GitAPIException e) {
 			e.printStackTrace();
 		}
 	}

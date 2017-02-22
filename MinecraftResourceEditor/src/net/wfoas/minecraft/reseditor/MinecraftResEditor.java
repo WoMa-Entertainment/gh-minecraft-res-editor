@@ -23,10 +23,18 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class MinecraftResEditor {
-	static ResEditorWindow rese;
+	public static ResEditorWindow rese;
 
 	public static ImageIcon CR_1, NOTE_1, CR, NOTE;
 	static String user, mail, pass;
+
+	public static String getMail() {
+		return mail;
+	}
+
+	public static String getName() {
+		return user;
+	}
 
 	public static void read() {
 		File folder = new File(System.getenv("appdata") + "/wfoasm-woma-net");
@@ -94,7 +102,6 @@ public class MinecraftResEditor {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-
 		CR_1 = readClassImage("/res/CRAFTING_RECIPES.png");
 		NOTE_1 = readClassImage("/res/NOTES.png");
 		CR = downScale(CR_1, 16, 16);

@@ -13,8 +13,13 @@ public class GUIProgressMonitor extends BatchingProgressMonitor {
 		SwingUtilities.invokeLater(() -> {
 			gui = new PMGUI();
 			gui.setTitle("Git Tasks - " + git);
-			gui.setMainTask("Pull from remote...");
-			gui.setSubtitle("Pulling...");
+			if (git.equalsIgnoreCase("Pull")) {
+				gui.setMainTask("Pull from remote...");
+				gui.setSubtitle("Pulling...");
+			} else if (git.equalsIgnoreCase("Push")) {
+				gui.setMainTask("Push to remote...");
+				gui.setSubtitle("Pushing...");
+			}
 			gui.setMax(1);
 			gui.setCount(0);
 			gui.setVisible(true);
