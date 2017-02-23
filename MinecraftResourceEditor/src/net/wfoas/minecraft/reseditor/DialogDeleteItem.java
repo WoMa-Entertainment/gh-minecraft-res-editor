@@ -2,20 +2,15 @@ package net.wfoas.minecraft.reseditor;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
-
 import javax.swing.JLabel;
-
 import java.awt.Font;
-
 import javax.swing.SwingConstants;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -96,5 +91,4 @@ public class DialogDeleteItem extends JDialog {
 			}
 		}
 	}
-
 }
