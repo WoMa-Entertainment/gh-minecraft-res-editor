@@ -330,7 +330,6 @@ public class MinecraftResEditor {
 	}
 
 	public static String slghGetProjectName() {
-
 		return "[SLGH] " + slgh_name;
 	}
 }

@@ -62,15 +62,20 @@ import net.wfoas.minecraft.reseditor.notescr.InfoNote;
 import net.wfoas.minecraft.reseditor.textandiconlist.DisplayableEntry;
 import net.wfoas.minecraft.reseditor.textandiconlist.TextAndIcon;
 import net.wfoas.minecraft.reseditor.textandiconlist.TextAndIconList;
+import net.wfoas.woma.slgh.ncr.SLGH;
+
 import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.JTable;
+import javax.swing.JPopupMenu;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ResEditorWindow extends JFrame {
 
 	private static final long serialVersionUID = 6229273644008449868L;
 	private JPanel contentPane;
-	File repository;
+	public File repository;
 	JPanel panel, panel_1, panel_35, panel_254;
 	public Git git = null;
 
@@ -96,6 +101,25 @@ public class ResEditorWindow extends JFrame {
 			}
 		});
 		mnGamehelperOpen.add(mntmOpenRepository);
+
+		JMenu mnRepository = new JMenu("Repository");
+		menuBar.add(mnRepository);
+
+		JMenuItem mntmMountRepository = new JMenuItem("Mount repository...");
+		mntmMountRepository.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SubstManager.subst(repository);
+			}
+		});
+		mnRepository.add(mntmMountRepository);
+
+		JMenuItem mntmUnmountRepository = new JMenuItem("Unmount repository...");
+		mntmUnmountRepository.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SubstManager.unsubst();
+			}
+		});
+		mnRepository.add(mntmUnmountRepository);
 
 		JMenu mnGit = new JMenu("Git");
 		menuBar.add(mnGit);
@@ -144,6 +168,8 @@ public class ResEditorWindow extends JFrame {
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(null, "Git Commands", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		JButton btnGitPull = new JButton("Git pull");
+		btnGitPull.setIcon(
+				MinecraftResEditor.downScale(new ImageIcon(ResEditorWindow.class.getResource("/res/git_pull.png"))));
 		btnGitPull.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Thread t = new Thread(() -> {
@@ -168,6 +194,8 @@ public class ResEditorWindow extends JFrame {
 		});
 
 		JButton btnGitPush = new JButton("Git push");
+		btnGitPush.setIcon(
+				MinecraftResEditor.downScale(new ImageIcon(ResEditorWindow.class.getResource("/res/git_push.png"))));
 		btnGitPush.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Thread t2 = new Thread(() -> {
@@ -188,6 +216,8 @@ public class ResEditorWindow extends JFrame {
 		});
 
 		JButton btnGitCommit = new JButton("Git commit");
+		btnGitCommit.setIcon(
+				MinecraftResEditor.downScale(new ImageIcon(ResEditorWindow.class.getResource("/res/git_commit.png"))));
 		btnGitCommit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new GitCommitDialog(new GitCommitRunnable() {
@@ -200,6 +230,8 @@ public class ResEditorWindow extends JFrame {
 		});
 
 		JButton btnGitCommit_1 = new JButton("Git commit & push");
+		btnGitCommit_1.setIcon(MinecraftResEditor
+				.downScale(new ImageIcon(ResEditorWindow.class.getResource("/res/git_commit_push.png"))));
 		btnGitCommit_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new GitCommitDialog(new GitCommitRunnable() {
@@ -225,6 +257,8 @@ public class ResEditorWindow extends JFrame {
 		});
 
 		JButton btnGitPull_1 = new JButton("Git pull & commit & push");
+		btnGitPull_1.setIcon(MinecraftResEditor
+				.downScale(new ImageIcon(ResEditorWindow.class.getResource("/res/git_pull_commit_push.png"))));
 		btnGitPull_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new GitCommitDialog(new GitCommitRunnable() {
@@ -303,6 +337,7 @@ public class ResEditorWindow extends JFrame {
 						.addContainerGap()));
 
 		table_1 = new JTable();
+		table_1.setEnabled(false);
 		scrollPane.setViewportView(table_1);
 		DefaultTableModel m = new DefaultTableModel(new String[] { "Commit ID", "Comment", "Author" }, 0);
 		try {
@@ -611,31 +646,69 @@ public class ResEditorWindow extends JFrame {
 			JScrollPane scrollPane_4 = new JScrollPane();
 
 			JScrollPane scrollPane_5 = new JScrollPane();
+
+			JButton btnNewButton = new JButton("Create Note");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					SLGH.createNote();
+				}
+			});
+
+			JButton btnDeleteNote = new JButton("Delete Note");
+			btnDeleteNote.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					SLGH.deleteNote();
+				}
+			});
 			GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 			gl_panel_4
 					.setHorizontalGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_panel_4.createSequentialGroup().addContainerGap()
-									.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 160,
-											GroupLayout.PREFERRED_SIZE)
+									.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING, false)
+											.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+											.addGroup(gl_panel_4.createParallelGroup(Alignment.TRAILING, false)
+													.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE,
+															160, Short.MAX_VALUE)
+													.addComponent(btnDeleteNote, Alignment.LEADING,
+															GroupLayout.PREFERRED_SIZE, 160,
+															GroupLayout.PREFERRED_SIZE)))
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(scrollPane_5, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
 									.addContainerGap()));
-			gl_panel_4.setVerticalGroup(gl_panel_4.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
+			gl_panel_4.setVerticalGroup(gl_panel_4.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING,
 					gl_panel_4.createSequentialGroup().addContainerGap()
-							.addGroup(gl_panel_4.createParallelGroup(Alignment.TRAILING)
-									.addComponent(scrollPane_5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 256,
-											Short.MAX_VALUE)
-									.addComponent(scrollPane_4, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 256,
-											Short.MAX_VALUE))
+							.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+									.addGroup(Alignment.TRAILING,
+											gl_panel_4.createSequentialGroup()
+													.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 198,
+															Short.MAX_VALUE)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(btnDeleteNote)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(btnNewButton))
+									.addComponent(scrollPane_5, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE))
 							.addContainerGap()));
 
+			JPopupMenu popupMenu = new JPopupMenu();
+			addPopup(scrollPane_4, popupMenu);
+
 			JTextPane textPane_2 = new JTextPane();
+			textPane_2.setEditable(false);
 			scrollPane_5.setViewportView(textPane_2);
 			slghReload();
 
 			JList<TextAndIcon> list_2 = TextAndIconList.createJListWithTextAndIcon(getNotes());
 			scrollPane_4.setViewportView(list_2);
 			panel_4.setLayout(gl_panel_4);
+
+			JMenuItem mntmEditNote = new JMenuItem("Edit Note...");
+			mntmEditNote.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// list_2.getSelectedValue().getid_name().getName()
+					// SLGH
+				}
+			});
+			popupMenu.add(mntmEditNote);
 
 			JPanel panel_5 = new JPanel();
 			tabbedPane.addTab("Crafting Recipes", null, panel_5, "Crafting Recipes");
@@ -645,30 +718,50 @@ public class ResEditorWindow extends JFrame {
 			JScrollPane scrollPane_7 = new JScrollPane();
 
 			JPanel panel_6 = new JPanel();
+
+			JButton btnCreateRecipe = new JButton("Create Recipe");
+			btnCreateRecipe.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					SLGH.createCR();
+				}
+			});
+
+			JButton btnDeleteRecipe = new JButton("Delete Recipe");
+			btnDeleteRecipe.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					SLGH.deleteCR();
+				}
+			});
 			GroupLayout gl_panel_5 = new GroupLayout(panel_5);
-			gl_panel_5
-					.setHorizontalGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_5.createSequentialGroup().addContainerGap()
-									.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 160,
-											GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-											.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-											.addComponent(scrollPane_7, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
-									.addContainerGap()));
-			gl_panel_5
-					.setVerticalGroup(
-							gl_panel_5.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING, gl_panel_5
-									.createSequentialGroup().addContainerGap().addGroup(gl_panel_5
-											.createParallelGroup(Alignment.TRAILING).addGroup(gl_panel_5
-													.createSequentialGroup()
-													.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 138,
-															GroupLayout.PREFERRED_SIZE)
-													.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-													.addComponent(scrollPane_7, GroupLayout.PREFERRED_SIZE, 80,
-															GroupLayout.PREFERRED_SIZE))
-											.addComponent(scrollPane_6, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE))
-									.addContainerGap()));
+			gl_panel_5.setHorizontalGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_5.createSequentialGroup().addContainerGap()
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(scrollPane_6, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+									.addComponent(btnDeleteRecipe, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+									.addComponent(btnCreateRecipe, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+									.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE).addComponent(
+											scrollPane_7, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+							.addContainerGap()));
+			gl_panel_5.setVerticalGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING,
+					gl_panel_5.createSequentialGroup().addContainerGap()
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+									.addGroup(Alignment.TRAILING,
+											gl_panel_5.createSequentialGroup()
+													.addComponent(scrollPane_6, GroupLayout.DEFAULT_SIZE, 198,
+															Short.MAX_VALUE)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(btnDeleteRecipe)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(btnCreateRecipe))
+									.addGroup(gl_panel_5.createSequentialGroup()
+											.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 138,
+													GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+											.addComponent(scrollPane_7, GroupLayout.PREFERRED_SIZE, 80,
+													GroupLayout.PREFERRED_SIZE)))
+							.addContainerGap()));
 
 			JList list_3 = TextAndIconList.createJListWithTextAndIcon(getRecipes());
 			scrollPane_6.setViewportView(list_3);
@@ -975,5 +1068,25 @@ public class ResEditorWindow extends JFrame {
 			}
 		}
 		MinecraftResEditor.readName();
+	}
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }

@@ -8,10 +8,16 @@ public class DisplayableEntry {
 	private final String title;
 	private final String imagePath;
 	private ImageIcon image;
+	private IInfo iinfo;
 
 	public DisplayableEntry(IInfo ii) {
-		this("<html><body>" + ii.getName() + "<br>von " + ii.getAuthor()
-				+ System.lineSeparator() + "</body></html>", ii.getIcon());
+		this("<html><body>" + ii.getName() + "<br>von " + ii.getAuthor() + System.lineSeparator() + "</body></html>",
+				ii.getIcon());
+		this.iinfo = ii;
+	}
+
+	public IInfo iinfo() {
+		return iinfo;
 	}
 
 	public DisplayableEntry(String title, String imagePath) {
