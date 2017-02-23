@@ -76,7 +76,7 @@ public class ResEditorWindow extends JFrame {
 	private static final long serialVersionUID = 6229273644008449868L;
 	private JPanel contentPane;
 	public File repository;
-	JPanel panel, panel_1, panel_35, panel_254;
+	JPanel panel, panel_1, panel_35, panel_254, panel_279;
 	public Git git = null;
 
 	public String fetchRes(String fetchResult) {
@@ -153,6 +153,9 @@ public class ResEditorWindow extends JFrame {
 
 		panel_1 = new JPanel();
 		tabbedPane.addTab("[Block] Models and Textures", null, panel_1, "Change models and textures of blocks...");
+
+		panel_279 = new JPanel();
+		tabbedPane.addTab("[Item] Models and Textures", null, panel_279, "Change models and textures of items...");
 
 		panel_35 = new JPanel();
 		tabbedPane.addTab("SLGH", null, panel_35,
@@ -402,6 +405,8 @@ public class ResEditorWindow extends JFrame {
 		panel_1.removeAll();
 		panel_35.setLayout(null);
 		panel_35.removeAll();
+		panel_279.setLayout(null);
+		panel_279.removeAll();
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
@@ -423,7 +428,6 @@ public class ResEditorWindow extends JFrame {
 		JButton btnAddIn = new JButton("Add i18n...");
 		btnAddIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//
 				AddI18n mod = new AddI18n("de_DE");
 				mod.setVisible(true);
 			}
@@ -806,6 +810,87 @@ public class ResEditorWindow extends JFrame {
 		// e2.printStackTrace();
 		// }
 		// panel_254.setLayout(gl_panel_254);
+		JPanel panel_2ddf = new JPanel();
+		panel_2ddf.setBorder(new TitledBorder(null, "List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		JPanel panel_3asf = new JPanel();
+		panel_3asf.setBorder(
+				new TitledBorder(null, "Available Models", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		JButton btnAddModelWith_1df = new JButton("Add model with texture");
+		btnAddModelWith_1df.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new DialogAddItemModelWithTexture(ResEditorWindow.this).setVisible(true);
+			}
+		});
+		JButton btnDeletesdf = new JButton("Delete item");
+		btnDeletesdf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new DialogDeleteItem(ResEditorWindow.this).setVisible(true);
+			}
+		});
+		GroupLayout gl_panel_279 = new GroupLayout(panel_279);
+		gl_panel_279.setHorizontalGroup(gl_panel_279.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_279
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_panel_279.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel_279.createSequentialGroup().addComponent(btnDeletesdf)
+								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnAddModelWith_1df))
+						.addComponent(panel_2ddf, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
+				.addPreferredGap(ComponentPlacement.UNRELATED)
+				.addComponent(panel_3asf, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE).addContainerGap()));
+		gl_panel_279
+				.setVerticalGroup(gl_panel_279.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_279.createSequentialGroup().addContainerGap()
+								.addGroup(gl_panel_279.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_panel_279.createSequentialGroup()
+												.addComponent(panel_2ddf, GroupLayout.DEFAULT_SIZE, 327,
+														Short.MAX_VALUE)
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addGroup(gl_panel_279.createParallelGroup(Alignment.BASELINE)
+														.addComponent(btnAddModelWith_1df).addComponent(btnDeletesdf)))
+										.addComponent(panel_3asf, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
+								.addContainerGap()));
+
+		JScrollPane scrollPane_5 = new JScrollPane();
+		DefaultListModel<String> stringlist111 = new DefaultListModel<>();
+		addAll(readAvailItemonlyModels(), stringlist111);
+
+		JList<String> list_11 = new JList<String>();
+		scrollPane_5.setViewportView(list_11);
+		list_11.setModel(stringlist111);
+		GroupLayout gl_panel_3asf = new GroupLayout(panel_3asf);
+		gl_panel_3asf
+				.setHorizontalGroup(gl_panel_3asf.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_3asf.createSequentialGroup().addContainerGap()
+								.addComponent(scrollPane_5, GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+								.addContainerGap()));
+		gl_panel_3asf
+				.setVerticalGroup(gl_panel_3asf.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_3asf.createSequentialGroup().addContainerGap()
+								.addComponent(scrollPane_5, GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+								.addContainerGap()));
+		panel_3asf.setLayout(gl_panel_3asf);
+
+		JScrollPane scrollPane_4 = new JScrollPane();
+		GroupLayout gl_panel_2ddf = new GroupLayout(panel_2ddf);
+		gl_panel_2ddf
+				.setHorizontalGroup(gl_panel_2ddf.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2ddf.createSequentialGroup().addContainerGap()
+								.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+								.addContainerGap()));
+		gl_panel_2ddf
+				.setVerticalGroup(gl_panel_2ddf.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2ddf.createSequentialGroup().addContainerGap()
+								.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+								.addContainerGap()));
+
+		DefaultListModel<String> mdl_sti = new DefaultListModel<String>();
+		addAll(readItemonlyModels(), mdl_sti);
+		JList list_2 = new JList();
+		list_2.setModel(mdl_sti);
+		scrollPane_4.setViewportView(list_2);
+		panel_2ddf.setLayout(gl_panel_2ddf);
+		panel_279.setLayout(gl_panel_279);
 	}
 
 	public DefaultListModel<String> addAll(List<String> slist, DefaultListModel<String> sl) {
@@ -898,6 +983,42 @@ public class ResEditorWindow extends JFrame {
 				if (f23.exists())
 					if (d24.exists())
 						array.add(f.getName().replace(".gh_mdl", ""));
+			}
+		}
+		return array;
+	}
+
+	public List<String> readAvailItemonlyModels() {
+		List<String> array = new ArrayList<String>();
+		if (repository == null)
+			return array;
+		List<String> blocks = readAvailModels();
+		File imFolder = new File(repository, "minecraft-res-editor/item-models");
+		File[] a = imFolder.listFiles();
+		if (a == null)
+			return array;
+		for (File f : a) {
+			if (f.toString().endsWith(".gh_mdl")) {
+				if (!blocks.contains(f.getName().replace(".gh_mdl", "")))
+					array.add(f.getName().replace(".gh_mdl", ""));
+			}
+		}
+		return array;
+	}
+
+	public List<String> readItemonlyModels() {
+		List<String> array = new ArrayList<String>();
+		if (repository == null)
+			return array;
+		List<String> blocks = readModels();
+		File imFolder = new File(repository, "src/main/resources/assets/gamehelper/models/item");
+		File[] a = imFolder.listFiles();
+		if (a == null)
+			return array;
+		for (File f : a) {
+			if (f.toString().endsWith(".json")) {
+				if (!blocks.contains(f.getName().replace(".json", "")))
+					array.add(f.getName().replace(".json", ""));
 			}
 		}
 		return array;
