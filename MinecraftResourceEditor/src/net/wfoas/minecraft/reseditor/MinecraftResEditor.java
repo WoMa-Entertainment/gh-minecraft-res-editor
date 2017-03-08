@@ -22,6 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import net.wfoas.minecraft.reseditor.TextureCollector.TexMode;
+
 public class MinecraftResEditor {
 	public static ResEditorWindow rese;
 
@@ -175,6 +177,63 @@ public class MinecraftResEditor {
 		addOrReplaceBlock(eng, blockid, modid, "en_US");
 	}
 
+	public static void addSpecialBlockModelWithI18n(String modid, String blockid, String model,
+			TextureCollector textures, String ger, String eng) {
+		Properties p = new Properties();
+		try {
+			FileInputStream fis = new FileInputStream(
+					new File(rese.repository, "minecraft-res-editor/special/" + model + ".res-desc"));
+			p.load(fis);
+			fis.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		String blockState = p.getProperty("BlockState");
+		addJustSpecialModelOrBlockState(modid, blockid,
+				new File(rese.repository, "minecraft-res-editor/special/" + blockState), blockid, BLOCKSTATE);
+		int mdl_count = Integer.parseInt(p.getProperty("BlockMdlCount"));
+		for (int i = 0; i < mdl_count; i++) {
+			System.out.println(
+					new File(rese.repository, "minecraft-res-editor/special/" + p.getProperty("BlockMdl" + i)));
+			addJustSpecialModelOrBlockState(modid, blockid,
+					new File(rese.repository, "minecraft-res-editor/special/" + p.getProperty("BlockMdl" + i)),
+					p.getProperty("BlockMdlOutName" + i).replace("%%blockid%%", blockid).replace("%%modid%%", modid),
+					BLOCKMODEL);
+		}
+		addJustSpecialModelOrBlockState(modid, blockid,
+				new File(rese.repository, "minecraft-res-editor/special/" + p.getProperty("ItemMdl")), blockid,
+				ITEMMODEL);
+		if (textures.getTm() == TexMode.ALL && p.getProperty("TextureMode").equalsIgnoreCase("all")) {
+			addJustSpecialTexture(modid, blockid, textures.getUp_normal_all(),
+					p.getProperty("Texture_all").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+		} else if (textures.getTm() == TexMode.SIDES && p.getProperty("TextureMode").equalsIgnoreCase("sides")) {
+			addJustSpecialTexture(modid, blockid, textures.getUp_normal_all(),
+					p.getProperty("Texture_up").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+			addJustSpecialTexture(modid, blockid, textures.getDown_bottom(),
+					p.getProperty("Texture_down").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+			addJustSpecialTexture(modid, blockid, textures.getNorth_front(),
+					p.getProperty("Texture_front").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+			addJustSpecialTexture(modid, blockid, textures.getWest_side(),
+					p.getProperty("Texture_side").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+		} else if (textures.getTm() == TexMode.SINGLE && p.getProperty("TextureMode").equalsIgnoreCase("single")) {
+			addJustSpecialTexture(modid, blockid, textures.getUp_normal_all(),
+					p.getProperty("Texture_up").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+			addJustSpecialTexture(modid, blockid, textures.getDown_bottom(),
+					p.getProperty("Texture_down").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+			addJustSpecialTexture(modid, blockid, textures.getNorth_front(),
+					p.getProperty("Texture_north").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+			addJustSpecialTexture(modid, blockid, textures.getWest_side(),
+					p.getProperty("Texture_west").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+			addJustSpecialTexture(modid, blockid, textures.getEast(),
+					p.getProperty("Texture_east").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+			addJustSpecialTexture(modid, blockid, textures.getSouth(),
+					p.getProperty("Texture_south").replace("%%blockid%%", blockid).replace("%%modid%%", modid));
+		}
+		addOrReplaceBlock(ger, blockid, modid, "de_DE");
+		addOrReplaceBlock(eng, blockid, modid, "en_US");
+	}
+
 	public static void addItemModelWithI18n(String modid, String itemid, String model, String pathtotex, String ger,
 			String eng) {
 		addItemOnlyModel(modid, itemid, model, pathtotex);
@@ -193,6 +252,33 @@ public class MinecraftResEditor {
 			Files.copy(new File(pathtotex).toPath(),
 					new File(rese.repository, "src/main/resources/assets/gamehelper/textures/items/" + itemid + ".png")
 							.toPath(),
+					StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static final byte BLOCKSTATE = 0, BLOCKMODEL = 1, ITEMMODEL = 2;
+
+	public static void addJustSpecialModelOrBlockState(String modid, String blockid, File reseditor_mdl, String name,
+			byte blockstate_blockmodel_itemmodel) {
+		String bmdl = readFileIntoSingleString(reseditor_mdl);
+		bmdl = bmdl.replaceAll("%%modid%%", modid);
+		bmdl = bmdl.replaceAll("%%blockid%%", blockid);
+		if (blockstate_blockmodel_itemmodel == BLOCKSTATE)
+			save(new File(rese.repository, "src/main/resources/assets/gamehelper/blockstates/" + name + ".json"), bmdl);
+		if (blockstate_blockmodel_itemmodel == BLOCKMODEL)
+			save(new File(rese.repository, "src/main/resources/assets/gamehelper/models/block/" + name + ".json"),
+					bmdl);
+		if (blockstate_blockmodel_itemmodel == ITEMMODEL)
+			save(new File(rese.repository, "src/main/resources/assets/gamehelper/models/item/" + name + ".json"), bmdl);
+	}
+
+	public static void addJustSpecialTexture(String modid, String blockid, String texture, String texture_name) {
+		try {
+			Files.copy(new File(texture).toPath(),
+					new File(rese.repository,
+							"src/main/resources/assets/gamehelper/textures/blocks/" + texture_name + ".png").toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();

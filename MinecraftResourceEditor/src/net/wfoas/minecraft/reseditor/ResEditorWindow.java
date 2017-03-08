@@ -557,6 +557,14 @@ public class ResEditorWindow extends JFrame {
 				mod.setVisible(true);
 			}
 		});
+
+		JButton btnAddSpecialModel = new JButton("Add special model");
+		btnAddSpecialModel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DialogAddSpecialBlockModel mod = new DialogAddSpecialBlockModel(ResEditorWindow.this);
+				mod.setVisible(true);
+			}
+		});
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap()
@@ -565,21 +573,28 @@ public class ResEditorWindow extends JFrame {
 										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnAddModelWith))
 								.addComponent(panel_21, GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
 						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(panel_31, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE).addContainerGap()));
-		gl_panel_1.setVerticalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap()
 						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_1.createSequentialGroup()
-										.addComponent(panel_21, GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+								.addComponent(panel_31, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE).addComponent(
+										btnAddSpecialModel))
+						.addContainerGap()));
+		gl_panel_1
+				.setVerticalGroup(
+						gl_panel_1.createParallelGroup(Alignment.LEADING)
+								.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup().addContainerGap()
+										.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+												.addComponent(panel_31, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														324, Short.MAX_VALUE)
+												.addComponent(panel_21, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														324, Short.MAX_VALUE))
 										.addPreferredGap(ComponentPlacement.UNRELATED)
 										.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-												.addComponent(btnAddModelWith).addComponent(btnDeleteBlock))
-										.addGap(3))
-								.addComponent(panel_31, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
-						.addContainerGap()));
+												.addComponent(btnAddModelWith).addComponent(btnDeleteBlock)
+												.addComponent(btnAddSpecialModel))
+										.addGap(14)));
 
 		DefaultListModel<String> stringlist = new DefaultListModel<>();
 		addAll(readAvailModels(), stringlist);
+		addAll(readAvailSpecialModels(), stringlist);
 
 		JScrollPane scrollPane_2 = new JScrollPane();
 		GroupLayout gl_panel_31 = new GroupLayout(panel_31);
@@ -983,6 +998,22 @@ public class ResEditorWindow extends JFrame {
 				if (f23.exists())
 					if (d24.exists())
 						array.add(f.getName().replace(".gh_mdl", ""));
+			}
+		}
+		return array;
+	}
+
+	public List<String> readAvailSpecialModels() {
+		List<String> array = new ArrayList<String>();
+		if (repository == null)
+			return array;
+		File specialFile = new File(repository, "minecraft-res-editor/special");
+		File[] a = specialFile.listFiles();
+		if (a == null)
+			return array;
+		for (File f : a) {
+			if (f.toString().endsWith(".res-desc")) {
+				array.add(f.getName().replace(".res-desc", ""));
 			}
 		}
 		return array;
